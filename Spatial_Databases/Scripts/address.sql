@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS addresses;
 Create table addresses (Id character varying(255), latitude float, longitude float, start_date character varying(255), end_date character varying(255));
-copy addresses from '/pgdata/rinx/input/climate_input_02.csv' (FORMAT csv, HEADER, DELIMITER ',');
+copy addresses from '/Users/devikakakkar/Downloads/address_2024.csv' (FORMAT csv, HEADER, DELIMITER ',');
 Alter table addresses add column startdate date;
 Alter table addresses add column enddate date;
 Update addresses set startdate=TO_DATE(start_date::TEXT,'YYYYMMDD');

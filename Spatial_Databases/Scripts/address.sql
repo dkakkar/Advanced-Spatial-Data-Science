@@ -1,4 +1,3 @@
-Update tmax2023 set filedate=TO_DATE(substring(filename,25,8),'YYYYMMDD');
 CREATE TABLE results_tmax AS
 SELECT
     a.id AS id,
@@ -14,4 +13,4 @@ INNER JOIN
 WHERE
     a.startdate <= b.filedate
     AND a.enddate >= b.filedate;Delete from results_tmax where tmax is NULL;
-Delete from results_tmax where tmax is NULL;
+

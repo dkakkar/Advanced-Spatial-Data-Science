@@ -1,13 +1,17 @@
-DROP TABLE IF EXISTS addresses;
-Create table addresses (Id character varying(255), longitude float, latitude float, start_date character varying(255), end_date character varying(255));
-copy addresses from '/Users/devikakakkar/Downloads/addresses_2023.csv' (FORMAT csv, HEADER, DELIMITER ',');
-Alter table addresses add column startdate date;
-Alter table addresses add column enddate date;
-Update addresses set startdate=TO_DATE(start_date,'YYYY-MM-DD');
-Update addresses set enddate=TO_DATE(end_date::TEXT,'YYYY-MM-DD');
-Alter table addresses drop column start_date;
-Alter table addresses drop column end_date;
-ALTER TABLE addresses ADD COLUMN geom geometry (Point, 4326);
-UPDATE addresses SET geom = ST_SetSRID (ST_MakePoint(longitude, latitude), 4326);
-create index addresses_id ON addresses USING GIST (geom);
-Cluster addresses using addresses_id;
+Update tmax2023 set filedate=TO_DATE(substring(filename,25,8),'YYYYMMDD');
+CREATE TABLE results_tmax AS
+SELECT
+    a.id AS id,
+    a.longitude AS longitude,
+    a.latitude AS latitude,
+    b.filedate AS day,
+    ROUND(ST_Value(b.rast, ST_Transform(a.geom, 4269))::NUMERIC, 4) AS tmax
+FROM
+    addresses a
+INNER JOIN
+    tmax2023 b
+    ON ST_Intersects(ST_Envelope(b.rast), ST_Transform(a.geom, 4269))
+WHERE
+    a.startdate <= b.filedate
+    AND a.enddate >= b.filedate;Delete from results_tmax where tmax is NULL;
+Delete from results_tmax where tmax is NULL;

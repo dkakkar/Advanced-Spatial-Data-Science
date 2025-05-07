@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS addresses;
 Create table addresses (Id character varying(255), latitude float, longitude float, start_date character varying(255), end_date character varying(255));
-copy addresses from '/Users/devikakakkar/Downloads/address_2023.csv' (FORMAT csv, HEADER, DELIMITER ',');
+copy addresses from '/Users/devikakakkar/Downloads/addresses_2023.csv' (FORMAT csv, HEADER, DELIMITER ',');
 Alter table addresses add column startdate date;
 Alter table addresses add column enddate date;
-Update addresses set startdate=TO_DATE(start_date::TEXT,'YYYY-MM-DD');
+Update addresses set startdate=TO_DATE(start_date,'YYYY-MM-DD');
 Update addresses set enddate=TO_DATE(end_date::TEXT,'YYYY-MM-DD');
 Alter table addresses drop column start_date;
 Alter table addresses drop column end_date;
